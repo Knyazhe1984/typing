@@ -1,0 +1,36 @@
+.header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 12px 24px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  flex-wrap: wrap;
+}
+
+.logo {
+  font-weight: 700;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.nav {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.link {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.active {
+  color: var(--accent);
+}
+
+.main {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 32px 16px;
+}

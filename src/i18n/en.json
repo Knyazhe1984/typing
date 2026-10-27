@@ -1,0 +1,76 @@
+{
+  "app": {
+    "title": "Typing Trainer",
+    "tagline": "Touch typing from scratch. Free, no ads."
+  },
+  "nav": {
+    "home": "Home",
+    "course": "Course",
+    "practice": "Practice",
+    "stats": "Stats",
+    "settings": "Settings"
+  },
+  "home": {
+    "start": "Start the course",
+    "practice": "Free practice",
+    "noMobile": "You need a physical keyboard to practice."
+  },
+  "settings": {
+    "uiLanguage": "Interface language",
+    "theme": "Theme",
+    "themeSystem": "System",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "sound": "Sounds",
+    "animations": "Animations",
+    "gamification": "Game elements (stars, achievements, streaks)"
+  },
+  "common": {
+    "comingSoon": "This section is coming soon."
+  },
+  "practice": {
+    "layout": "Layout",
+    "text": "Text",
+    "customText": "Custom text",
+    "customPlaceholder": "Paste or type text to practice",
+    "start": "Start",
+    "removedChars": "Removed characters missing from the layout: {{chars}}",
+    "hintStart": "Place your fingers on the home row — {{home}} — and start typing.",
+    "wrongLayout": "Looks like another keyboard layout is active. Switch it to “{{layout}}”.",
+    "speed": "Speed",
+    "cpmUnit": "cpm",
+    "wpmUnit": "wpm",
+    "accuracy": "Accuracy",
+    "errors": "Errors",
+    "time": "Time",
+    "done": "Done!",
+    "again": "Again",
+    "next": "Next text",
+    "stopOnError": "Stop on errors",
+    "showKeyboard": "Keyboard",
+    "showHands": "Hands"
+  },
+  "course": {
+    "lesson": "Lesson {{n}}",
+    "theoryOnly": "Theory",
+    "locked": "Complete the previous lesson first",
+    "attempts": "Attempts: {{n}}",
+    "best": "Best: {{cpm}} cpm"
+  },
+  "lesson": {
+    "back": "Back",
+    "next": "Next",
+    "toExercises": "Start exercises",
+    "finishTheory": "Done",
+    "exercise": "Exercise {{n}} of {{total}}",
+    "resultTitle": "Lesson complete!",
+    "failedTitle": "Almost there",
+    "failedHint": "You need at least {{min}}% accuracy. Type slower — speed will come later.",
+    "nextStar": "Next star: {{acc}}% accuracy and {{cpm}} cpm.",
+    "newBest": "New record!",
+    "retry": "Try again",
+    "nextLesson": "Next lesson",
+    "toCourse": "Back to course",
+    "notFound": "Lesson not found."
+  }
+}

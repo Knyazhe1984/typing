@@ -1,0 +1,28 @@
+.screen {
+  display: grid;
+  gap: 18px;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  align-items: center;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.custom {
+  display: grid;
+  gap: 10px;
+}
+
+.custom textarea {
+  font: inherit;
+  min-height: 120px;
+  padding: 12px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+}

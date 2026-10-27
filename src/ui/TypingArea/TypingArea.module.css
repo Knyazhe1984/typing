@@ -1,0 +1,58 @@
+.area {
+  font-family: var(--font-mono);
+  font-size: 26px;
+  line-height: 1.6;
+  padding: 20px 24px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  word-break: break-word;
+  white-space: pre-wrap;
+  outline: none;
+}
+
+.pending {
+  color: var(--text-muted);
+}
+
+.correct {
+  color: var(--text);
+}
+
+.corrected {
+  color: var(--text);
+  text-decoration: underline wavy var(--error);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 6px;
+}
+
+.wrong {
+  color: var(--error);
+  background: color-mix(in srgb, var(--error) 18%, transparent);
+  border-radius: 3px;
+}
+
+.current {
+  border-bottom: 3px solid var(--accent);
+  color: var(--text);
+}
+
+.shake {
+  animation: shake 160ms;
+}
+
+@keyframes shake {
+  25% {
+    transform: translateX(-3px);
+  }
+  75% {
+    transform: translateX(3px);
+  }
+}
+
+@media (max-width: 640px) {
+  .area {
+    font-size: 20px;
+    padding: 14px 16px;
+  }
+}
