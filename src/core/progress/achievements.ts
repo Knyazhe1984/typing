@@ -8,6 +8,8 @@ export interface SessionSummary {
   accuracy: number
   chars: number
   stars?: number
+  score?: number
+  won?: boolean
 }
 
 export interface AchievementContext {
@@ -26,7 +28,9 @@ export interface Achievement {
   check: (ctx: AchievementContext) => boolean
 }
 
-const isLesson = (s: SessionSummary) => s.lessonId !== 'practice'
+const isPractice = (s: SessionSummary) => s.lessonId === 'practice'
+const isGame = (s: SessionSummary, game: string) => s.lessonId === `game:${game}`
+const isLesson = (s: SessionSummary) => !isPractice(s) && !s.lessonId.startsWith('game:')
 const totalChars = (ctx: AchievementContext) => ctx.sessions.reduce((sum, s) => sum + s.chars, 0)
 // Скорость засчитываем только при приличной точности — иначе это не скорость, а спешка
 const reachedSpeed = (ctx: AchievementContext, cpm: number) =>
@@ -142,7 +146,27 @@ export const achievements: Achievement[] = [
       ru: 'Наберите 10 текстов в свободной тренировке',
       en: 'Finish 10 texts in free practice',
     },
-    check: (ctx) => ctx.sessions.filter((s) => !isLesson(s)).length >= 10,
+    check: (ctx) => ctx.sessions.filter(isPractice).length >= 10,
+  },
+  {
+    id: 'falling-150',
+    icon: '🌠',
+    title: { ru: 'Звездопад', en: 'Starfall' },
+    description: {
+      ru: 'Наберите 150 очков в «Падающих словах»',
+      en: 'Score 150 points in Falling Words',
+    },
+    check: (ctx) => ctx.sessions.some((s) => isGame(s, 'falling') && (s.score ?? 0) >= 150),
+  },
+  {
+    id: 'ghost-win',
+    icon: '👻',
+    title: { ru: 'Быстрее себя', en: 'Faster than yourself' },
+    description: {
+      ru: 'Обгоните своего призрака в гонке',
+      en: 'Beat your own ghost in a race',
+    },
+    check: (ctx) => ctx.sessions.some((s) => isGame(s, 'ghost') && s.won === true),
   },
   speed(100, '🚲'),
   speed(200, '🚗'),

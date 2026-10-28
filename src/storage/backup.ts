@@ -2,6 +2,7 @@ import { useSettings } from '../store/settings'
 import {
   db,
   type AchievementRecord,
+  type GhostRecord,
   type KeyStatRecord,
   type LessonProgress,
   type SessionRecord,
@@ -20,23 +21,26 @@ export interface Backup {
     sessions: SessionRecord[]
     keyStats: KeyStatRecord[]
     achievements: AchievementRecord[]
+    /** Появилось позже — в старых копиях может не быть */
+    ghosts?: GhostRecord[]
   }
 }
 
 export async function createBackup(): Promise<Backup> {
   const { set: _set, ...settings } = useSettings.getState()
-  const [lessonProgress, sessions, keyStats, achievements] = await Promise.all([
+  const [lessonProgress, sessions, keyStats, achievements, ghosts] = await Promise.all([
     db.lessonProgress.toArray(),
     db.sessions.toArray(),
     db.keyStats.toArray(),
     db.achievements.toArray(),
+    db.ghosts.toArray(),
   ])
   return {
     app: APP,
     version: VERSION,
     exportedAt: Date.now(),
     settings,
-    data: { lessonProgress, sessions, keyStats, achievements },
+    data: { lessonProgress, sessions, keyStats, achievements, ghosts },
   }
 }
 
@@ -66,10 +70,22 @@ export function parseBackup(raw: unknown): Backup {
       throw new Error(`bad table ${table}`)
     }
   }
+  const ghosts = data.ghosts
+  if (
+    ghosts !== undefined &&
+    !(
+      Array.isArray(ghosts) &&
+      ghosts.every(
+        (g) => hasFields(g, { layout: 'string', textId: 'string' }) && Array.isArray(g.timeline),
+      )
+    )
+  ) {
+    throw new Error('bad table ghosts')
+  }
   return raw as unknown as Backup
 }
 
-const tables = () => [db.lessonProgress, db.sessions, db.keyStats, db.achievements]
+const tables = () => [db.lessonProgress, db.sessions, db.keyStats, db.achievements, db.ghosts]
 
 /** Заменяет весь прогресс и настройки содержимым копии. */
 export async function restoreBackup(backup: Backup) {
@@ -80,6 +96,7 @@ export async function restoreBackup(backup: Backup) {
     await db.sessions.bulkPut(data.sessions)
     await db.keyStats.bulkPut(data.keyStats)
     await db.achievements.bulkPut(data.achievements)
+    await db.ghosts.bulkPut(data.ghosts ?? [])
   })
   const current = useSettings.getState()
   // Берём только известные настройки нужного типа

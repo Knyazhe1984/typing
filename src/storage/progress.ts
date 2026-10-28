@@ -1,4 +1,4 @@
-import type { Metrics, Session } from '../core/engine/session'
+import type { Keystroke, Metrics, Session } from '../core/engine/session'
 import type { LayoutId } from '../core/layouts'
 import { aggregateKeystrokes, emptyKeyStat, mergeKeyStat } from '../core/stats/keyStats'
 import { levelFromXp, xpForSession } from '../core/progress/xp'
@@ -30,8 +30,14 @@ async function grantRewards(xp: number, before: number): Promise<Rewards> {
 }
 
 /** Сохраняет статистику по клавишам из завершённых упражнений. */
-export async function recordKeyStats(layout: LayoutId, sessions: readonly Session[]) {
-  const totals = aggregateKeystrokes(sessions.flatMap((s) => s.keystrokes))
+export async function recordKeyStats(
+  layout: LayoutId,
+  sessions: readonly Pick<Session, 'keystrokes'>[],
+) {
+  // Промахи мимо всех слов в играх без ожидаемого символа — в статистику клавиш не идут
+  const totals = aggregateKeystrokes(
+    sessions.flatMap((s) => s.keystrokes).filter((k) => k.expected !== ''),
+  )
   await db.transaction('rw', db.keyStats, async () => {
     for (const [char, stat] of totals) {
       const prev = await db.keyStats.get([layout, char])
@@ -117,4 +123,36 @@ export async function completeTheoryLesson(lessonId: string) {
     lastPlayedAt: Date.now(),
   })
   return unlockAchievements()
+}
+
+export interface GameResult {
+  /** 'falling' или 'ghost' */
+  game: string
+  layout: LayoutId
+  m: Metrics
+  chars: number
+  keystrokes: readonly Keystroke[]
+  score?: number
+  won?: boolean
+}
+
+/** Записывает партию мини-игры: она тоже идёт в опыт, серию и статистику клавиш. */
+export async function recordGame(r: GameResult): Promise<Rewards> {
+  const before = await totalXp()
+  const xp = xpForSession(r.chars)
+  await db.sessions.add({
+    lessonId: `game:${r.game}`,
+    layout: r.layout,
+    finishedAt: Date.now(),
+    cpm: r.m.cpm,
+    accuracy: r.m.accuracy,
+    errors: r.m.errors,
+    elapsedMs: r.m.elapsedMs,
+    chars: r.chars,
+    xp,
+    score: r.score,
+    won: r.won,
+  })
+  await recordKeyStats(r.layout, [{ keystrokes: [...r.keystrokes] }])
+  return grantRewards(xp, before)
 }

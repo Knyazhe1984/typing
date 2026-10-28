@@ -9,6 +9,7 @@ import s from './Layout.module.css'
 const links = [
   { to: '/course', key: 'nav.course' },
   { to: '/practice', key: 'nav.practice' },
+  { to: '/games', key: 'nav.games' },
   { to: '/achievements', key: 'nav.achievements', game: true },
   { to: '/stats', key: 'nav.stats' },
   { to: '/settings', key: 'nav.settings' },

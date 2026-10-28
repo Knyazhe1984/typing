@@ -1,0 +1,204 @@
+.screen {
+  display: grid;
+  gap: 16px;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  gap: 16px;
+}
+
+.card {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  padding: 20px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+a.card:hover {
+  text-decoration: none;
+  border-color: var(--accent);
+}
+
+.card h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.card p {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.cardArt {
+  height: 90px;
+  border-radius: 8px;
+  background: var(--bg);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Падающие слова */
+.hud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  align-items: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.hud strong {
+  font-size: 20px;
+}
+
+.lives {
+  color: var(--error);
+  font-size: 20px;
+  letter-spacing: 2px;
+}
+
+.livesLost {
+  color: var(--border);
+}
+
+.arena {
+  position: relative;
+  height: min(480px, 60vh);
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.ground {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4px;
+  background: color-mix(in srgb, var(--error) 60%, transparent);
+}
+
+.word {
+  position: absolute;
+  transform: translateX(-50%);
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 20px;
+  white-space: nowrap;
+  background: var(--bg);
+  border: 1px solid var(--border);
+}
+
+.activeWord {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 30%, transparent);
+  z-index: 1;
+}
+
+.typed {
+  color: var(--accent);
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 12px;
+  padding: 16px;
+  text-align: center;
+  background: color-mix(in srgb, var(--surface) 85%, transparent);
+  z-index: 2;
+}
+
+.overlay h2 {
+  margin: 0;
+}
+
+.overlay p {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.bigScore {
+  font-size: 48px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Гонка */
+.track {
+  display: grid;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.lane {
+  display: grid;
+  grid-template-columns: 110px 1fr 48px;
+  gap: 10px;
+  align-items: center;
+  font-size: 14px;
+}
+
+.laneBar {
+  position: relative;
+  height: 12px;
+  border-radius: 6px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+}
+
+.laneFill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 6px;
+  background: var(--accent);
+  transition: width 100ms linear;
+}
+
+.ghostFill {
+  background: var(--text-muted);
+  opacity: 0.6;
+}
+
+.lanePct {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+
+.raceResult {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .laneFill {
+    transition: none;
+  }
+}
+
+svg.cardArt {
+  display: block;
+  width: 100%;
+}

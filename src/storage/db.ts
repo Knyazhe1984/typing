@@ -27,6 +27,19 @@ export interface SessionRecord {
   /** Верно набранные символы */
   chars: number
   xp: number
+  /** Мини-игры: очки и победа над призраком */
+  score?: number
+  won?: boolean
+}
+
+/** Лучший заезд по тексту — с ним соревнуется «призрак». */
+export interface GhostRecord {
+  layout: LayoutId
+  textId: string
+  /** Время набора каждого символа, мс от первого нажатия */
+  timeline: number[]
+  cpm: number
+  recordedAt: number
 }
 
 export interface AchievementRecord {
@@ -45,6 +58,7 @@ export const db = new Dexie('typing-trainer') as Dexie & {
   sessions: EntityTable<SessionRecord, 'id'>
   keyStats: Table<KeyStatRecord, [LayoutId, string]>
   achievements: EntityTable<AchievementRecord, 'id'>
+  ghosts: Table<GhostRecord, [LayoutId, string]>
 }
 
 db.version(1).stores({
@@ -65,3 +79,6 @@ db.version(2)
         s.xp ??= xpForSession(s.chars, s.stars)
       }),
   )
+
+// v3: лучшие заезды для гонки с призраком
+db.version(3).stores({ ghosts: '[layout+textId]' })

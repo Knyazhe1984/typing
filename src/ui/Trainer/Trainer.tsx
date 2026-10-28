@@ -19,13 +19,15 @@ interface Props {
   /** Изученные символы: остальные клавиши приглушены */
   enabledChars?: Set<string>
   onFinish: (session: Session, m: Metrics) => void
+  /** Вызывается после каждого нажатия — например, чтобы двигать соперника в гонке */
+  onProgress?: (session: Session) => void
 }
 
 /**
  * Набор одного текста: живые метрики, поле набора, руки и клавиатура.
  * Новый текст — новый экземпляр (через key).
  */
-export function Trainer({ text, layout, enabledChars, onFinish }: Props) {
+export function Trainer({ text, layout, enabledChars, onFinish, onProgress }: Props) {
   const { t } = useTranslation()
   const { stopOnError, showKeyboard, showHands, animations } = useSettings()
   const { session, target, errorTick, errorCode, wrongLayout } = useTypingSession(
@@ -44,6 +46,11 @@ export function Trainer({ text, layout, enabledChars, onFinish }: Props) {
   useEffect(() => {
     if (keystrokeCount > 0) play('key')
   }, [keystrokeCount])
+
+  const progress = useEffectEvent((current: Session) => onProgress?.(current))
+  useEffect(() => {
+    if (keystrokeCount > 0) progress(session)
+  }, [keystrokeCount, session])
 
   const finish = useEffectEvent((done: Session) => onFinish(done, metrics(done, 0)))
   // После завершения сессия больше не меняется, так что срабатывает ровно один раз

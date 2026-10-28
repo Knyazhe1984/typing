@@ -49,7 +49,7 @@ test('курс: азы → первый урок → звёзды сохраня
   await expect(page.getByRole('banner').getByText('1', { exact: true })).toBeVisible()
   await page.getByRole('link', { name: 'Достижения' }).click()
   // 4 за уроки + 3 за скорость: тест печатает мгновенно
-  await expect(page.getByText('7 из 17')).toBeVisible()
+  await expect(page.getByText('7 из 19')).toBeVisible()
   await page.screenshot({ path: 'test-results/achievements.png', fullPage: true })
 
   await page

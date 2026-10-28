@@ -9,7 +9,8 @@
     "practice": "Practice",
     "stats": "Stats",
     "settings": "Settings",
-    "achievements": "Achievements"
+    "achievements": "Achievements",
+    "games": "Games"
   },
   "home": {
     "start": "Start the course",
@@ -137,5 +138,41 @@
     "colHits": "Hits",
     "colErrors": "Errors",
     "colLatency": "Delay"
+  },
+  "games": {
+    "title": "Games",
+    "difficulty": "Difficulty",
+    "easy": "Easy",
+    "normal": "Normal",
+    "hard": "Hard",
+    "score": "Score",
+    "level": "Level",
+    "best": "Best",
+    "lives": "Lives: {{n}}",
+    "start": "Start",
+    "playAgain": "Play again",
+    "over": "Game over",
+    "paused": "Paused",
+    "resumeHint": "Press any key to continue",
+    "pauseHint": "Esc to pause",
+    "falling": {
+      "title": "Falling Words",
+      "description": "Shoot down words before they hit the ground. Each level gets faster.",
+      "rules": "Type a word to shoot it down: the first letter picks the word closest to the ground. A fallen word costs a life; you have three."
+    },
+    "ghost": {
+      "title": "Ghost Race",
+      "description": "Beat your best: the ghost replays your fastest run on this text.",
+      "you": "You",
+      "ghost": "Ghost",
+      "pacer": "Pacer",
+      "vsGhost": "The ghost replays your best run: {{cpm}} cpm. It starts with your first keystroke.",
+      "vsPacer": "No ghost for this text yet — race the pacer ({{cpm}} cpm). It starts with your first keystroke.",
+      "wonGhost": "You beat the ghost by {{s}} s!",
+      "wonPacer": "You beat the pacer by {{s}} s!",
+      "lost": "{{name}} was faster by {{s}} s. Try again?",
+      "saved": "This run is your new ghost.",
+      "lowAccuracy": "Only runs with at least 90% accuracy become a ghost."
+    }
   }
 }
