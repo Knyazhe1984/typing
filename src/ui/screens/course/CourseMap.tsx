@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import type { Course } from '../../../core/course/types'
@@ -11,9 +12,19 @@ import s from './CourseMap.module.css'
 
 const ROW = 130
 const TOP = 40
+/** Дополнительный отступ перед заголовком раздела */
+const SECTION = 70
 
-/** Точка узла: x в процентах ширины, y в пикселях — тропинка виляет из стороны в сторону. */
-const point = (i: number) => ({ x: 50 + 30 * Math.sin(i * 1.2), y: TOP + i * ROW })
+/** Точки узлов: x в процентах ширины, y в пикселях — тропинка виляет из стороны в сторону. */
+function layoutPoints(lessons: Course['lessons']) {
+  let y = TOP
+  return lessons.map((lesson, i) => {
+    if (lesson.section) y += SECTION
+    const p = { x: 50 + 30 * Math.sin(i * 1.2), y }
+    y += ROW
+    return p
+  })
+}
 
 interface Props {
   course: Course
@@ -25,9 +36,19 @@ export function CourseMap({ course, progress }: Props) {
   const l = useL10n()
   const { gamification, animations } = useSettings()
   const lessons = course.lessons
-  const height = TOP + (lessons.length - 1) * ROW + 110
   const current = lessons.findIndex((x) => !progress.get(x.id)?.completed)
-  const points = lessons.map((_, i) => point(i))
+  const points = layoutPoints(lessons)
+  const height = points[points.length - 1].y + 110
+  const currentRef = useRef<HTMLAnchorElement>(null)
+  const scrolledTo = useRef<string>(undefined)
+
+  // Длинный курс: при открытии карты сразу показываем текущий урок
+  useEffect(() => {
+    const el = currentRef.current
+    if (!el || scrolledTo.current === course.layout || current < 3) return
+    scrolledTo.current = course.layout
+    el.scrollIntoView({ block: 'center' })
+  }, [course.layout, current])
   const polyline = (pts: typeof points) => pts.map((p) => `${p.x},${p.y}`).join(' ')
   const doneUntil = current === -1 ? lessons.length : current + 1
 
@@ -79,21 +100,36 @@ export function CourseMap({ course, progress }: Props) {
           </>
         )
         const style = { left: `${points[i].x}%`, top: points[i].y }
-        return unlocked ? (
-          <Link
-            key={lesson.id}
-            to={`/course/${lesson.id}`}
-            className={cls.join(' ')}
-            style={style}
-            aria-label={`${t('course.lesson', { n: i })}: ${l(lesson.title)}`}
-          >
-            {content}
-          </Link>
-        ) : (
-          <div key={lesson.id} className={cls.join(' ')} style={style} title={t('course.locked')}>
-            {content}
-          </div>
+        const heading = lesson.section && (
+          <h2 key={`s-${lesson.id}`} className={s.section} style={{ top: points[i].y - 80 }}>
+            {l(lesson.section)}
+          </h2>
         )
+        return unlocked
+          ? [
+              heading,
+              <Link
+                key={lesson.id}
+                ref={i === current ? currentRef : undefined}
+                to={`/course/${lesson.id}`}
+                className={cls.join(' ')}
+                style={style}
+                aria-label={`${t('course.lesson', { n: i })}: ${l(lesson.title)}`}
+              >
+                {content}
+              </Link>,
+            ]
+          : [
+              heading,
+              <div
+                key={lesson.id}
+                className={cls.join(' ')}
+                style={style}
+                title={t('course.locked')}
+              >
+                {content}
+              </div>,
+            ]
       })}
     </div>
   )

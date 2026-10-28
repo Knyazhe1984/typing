@@ -1,3 +1,4 @@
+import { useLiveQuery } from 'dexie-react-hooks'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate, useParams } from 'react-router-dom'
@@ -8,7 +9,7 @@ import { combinedMetrics, type Metrics, type Session } from '../../../core/engin
 import { createRng } from '../../../core/generator/random'
 import { layouts } from '../../../core/layouts'
 import { defaultThresholds, starsFor } from '../../../core/progress/stars'
-import type { LessonProgress } from '../../../storage/db'
+import { db, type LessonProgress } from '../../../storage/db'
 import { completeTheoryLesson, recordLesson, type Rewards } from '../../../storage/progress'
 import { useSettings } from '../../../store/settings'
 import { AnimatedStars, Confetti, XpGain } from '../../Game/Celebration'
@@ -31,8 +32,35 @@ type Phase =
 export function LessonRoute() {
   const { lessonId = '' } = useParams()
   const { t } = useTranslation()
+  const l = useL10n()
   const found = findLesson(lessonId)
+  const prevLesson = found && found.course.lessons[found.lesson.index - 1]
+  // Пока запрос не вернул ответ именно для этого урока, ничего не показываем:
+  // при смене урока useLiveQuery ещё отдаёт результат старого запроса
+  const prev = useLiveQuery(
+    async () => ({
+      id: prevLesson?.id,
+      done: !prevLesson || !!(await db.lessonProgress.get(prevLesson.id))?.completed,
+    }),
+    [prevLesson?.id],
+  )
   if (!found) return <p>{t('lesson.notFound')}</p>
+  if (!prev || prev.id !== prevLesson?.id) return null
+  if (prevLesson && !prev.done) {
+    return (
+      <div className={t_.result}>
+        <p>{t('lesson.locked', { lesson: l(prevLesson.title) })}</p>
+        <div className={t_.actions}>
+          <Link className="btn btn-primary" to={`/course/${prevLesson.id}`}>
+            {l(prevLesson.title)}
+          </Link>
+          <Link className="btn" to="/course">
+            {t('lesson.toCourse')}
+          </Link>
+        </div>
+      </div>
+    )
+  }
   return <LessonScreen key={lessonId} course={found.course} lesson={found.lesson} />
 }
 

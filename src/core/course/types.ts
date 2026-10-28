@@ -16,6 +16,8 @@ export type Illustration =
   | { type: 'fingers' }
   /** Новые клавиши урока и пальцы, которыми их нажимать */
   | { type: 'newKeys' }
+  /** Обе клавиши Shift и мизинцы */
+  | { type: 'shift' }
 
 export interface TheoryPage {
   title: L10n
@@ -35,6 +37,8 @@ export type Exercise =
 export interface LessonDef {
   id: string
   title: L10n
+  /** С этого урока начинается новый раздел курса — заголовок на карте */
+  section?: L10n
   /** Буквы, которые появляются в этом уроке */
   newKeys?: string
   theory?: TheoryPage[]
@@ -45,8 +49,10 @@ export interface LessonDef {
 export interface Lesson extends LessonDef {
   layout: LayoutId
   index: number
-  /** Все буквы, изученные к этому уроку включительно, плюс пробел */
+  /** Все символы, изученные к этому уроку включительно, плюс пробел */
   keys: string
+  /** Изученные клавиши буквенных рядов без Shift — из них собираются буквенные группы */
+  letters: string
 }
 
 export interface Course {

@@ -28,10 +28,17 @@
     "animations": "Animations",
     "gamification": "Game elements (stars, achievements, streaks)",
     "keyClicks": "Click on every keystroke",
-    "dailyGoal": "Daily goal, minutes"
-  },
-  "common": {
-    "comingSoon": "This section is coming soon."
+    "dailyGoal": "Daily goal, minutes",
+    "data": "Data",
+    "dataHint": "Your progress is stored only in this browser. Save a backup file to move it to another computer or keep it safe when clearing browser data.",
+    "export": "Save backup",
+    "import": "Load backup",
+    "reset": "Reset progress",
+    "importConfirm": "Your current progress will be replaced with the data from the file. Continue?",
+    "importDone": "Progress loaded",
+    "importError": "This is not a trainer backup file, or it is damaged",
+    "resetConfirm": "Delete all progress, statistics and achievements? This cannot be undone.",
+    "resetDone": "Progress reset"
   },
   "practice": {
     "layout": "Layout",
@@ -53,7 +60,10 @@
     "next": "Next text",
     "stopOnError": "Stop on errors",
     "showKeyboard": "Keyboard",
-    "showHands": "Hands"
+    "showHands": "Hands",
+    "weakKeys": "Weak keys",
+    "weakNoData": "Not enough data yet: complete a few lessons or practice sessions, and exercises for your hardest keys will appear here.",
+    "weakFocus": "Training keys: {{chars}}"
   },
   "course": {
     "lesson": "Lesson {{n}}",
@@ -76,7 +86,8 @@
     "retry": "Try again",
     "nextLesson": "Next lesson",
     "toCourse": "Back to course",
-    "notFound": "Lesson not found."
+    "notFound": "Lesson not found.",
+    "locked": "This lesson is locked: complete “{{lesson}}” first."
   },
   "game": {
     "levelUp": "Level {{level}} reached!",
@@ -99,8 +110,32 @@
     "lockedAchievement": "Not unlocked yet",
     "unlockedAt": "Unlocked {{date}}",
     "manyAchievements_one": "{{count}} new achievement",
-    "manyAchievements_few": "{{count}} new achievements",
-    "manyAchievements_many": "{{count}} new achievements",
     "manyAchievements_other": "{{count}} new achievements"
+  },
+  "stats": {
+    "totalTime": "Practice time",
+    "totalChars": "Characters typed",
+    "sessions": "Sessions",
+    "bestSpeed": "Best speed",
+    "recentAccuracy": "Accuracy, last 20 sessions",
+    "minutes": "{{m}} min",
+    "hoursMinutes": "{{h}} h {{m}} min",
+    "ms": "ms",
+    "empty": "Charts will appear here after your first lesson or practice session in this layout.",
+    "speedChart": "Speed, chars/min",
+    "accuracyChart": "Accuracy",
+    "lastSessions_one": "last {{count}} session",
+    "lastSessions_other": "last {{count}} sessions",
+    "heatmap": "Keyboard heatmap",
+    "heatErrors": "Errors",
+    "heatSpeed": "Delay",
+    "noData": "not enough data",
+    "weakTitle": "Weak keys",
+    "weakEmpty": "No clearly weak keys yet — or not enough data.",
+    "trainWeak": "Practice",
+    "colKey": "Key",
+    "colHits": "Hits",
+    "colErrors": "Errors",
+    "colLatency": "Delay"
   }
 }

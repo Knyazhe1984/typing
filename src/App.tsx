@@ -4,8 +4,8 @@ import i18n from './i18n'
 import { useSettings } from './store/settings'
 import { Layout } from './ui/Layout/Layout'
 import { HomeScreen } from './ui/screens/HomeScreen'
-import { PlaceholderScreen } from './ui/screens/PlaceholderScreen'
 import { SettingsScreen } from './ui/screens/SettingsScreen'
+import { StatsScreen } from './ui/screens/StatsScreen'
 import { AchievementsScreen } from './ui/screens/AchievementsScreen'
 import { CourseScreen } from './ui/screens/course/CourseScreen'
 import { LessonRoute } from './ui/screens/course/LessonScreen'
@@ -36,7 +36,7 @@ export default function App() {
           <Route path="course/:lessonId" element={<LessonRoute />} />
           <Route path="practice" element={<PracticeScreen />} />
           <Route path="achievements" element={<AchievementsScreen />} />
-          <Route path="stats" element={<PlaceholderScreen titleKey="nav.stats" />} />
+          <Route path="stats" element={<StatsScreen />} />
           <Route path="settings" element={<SettingsScreen />} />
         </Route>
       </Routes>

@@ -1,4 +1,5 @@
-import type { L10n, LessonDef, TheoryPage } from '../../core/course/types'
+import type { Exercise, L10n, LessonDef, TheoryPage } from '../../core/course/types'
+import type { StarThresholds } from '../../core/progress/stars'
 
 interface HomeKeys {
   left: string
@@ -82,8 +83,68 @@ export function newKeysPage(body: L10n): TheoryPage {
 }
 
 /** Стандартный набор упражнений для урока с новыми клавишами. */
-export const standardExercises = [
+export const standardExercises: Exercise[] = [
   { kind: 'letters', groups: 10, onlyNew: true },
   { kind: 'letters', groups: 14 },
   { kind: 'words', count: 12 },
-] as const
+]
+
+/** Повторение раздела: слова и буквенные группы из всего изученного. */
+export const reviewExercises: Exercise[] = [
+  { kind: 'words', count: 15 },
+  { kind: 'letters', groups: 15 },
+  { kind: 'words', count: 20 },
+]
+
+/** Заглавные, знаки и символы: буквенные группы из них бессмысленны, тренируем на словах. */
+export const wordExercises: Exercise[] = [
+  { kind: 'words', count: 12 },
+  { kind: 'words', count: 15 },
+  { kind: 'words', count: 20 },
+]
+
+/** Цифры: сначала числа из новых цифр, затем слова вперемешку с числами. */
+export const digitExercises: Exercise[] = [
+  { kind: 'letters', groups: 10, onlyNew: true },
+  { kind: 'words', count: 15 },
+  { kind: 'words', count: 20 },
+]
+
+/** Первые уроки — щадящие пороги скорости, пока пальцы только запоминают клавиши. */
+export const gentle = (): StarThresholds => ({ accuracy: [0.9, 0.94, 0.97], cpm: [50, 90] })
+
+/** Цифры и символы далеко от основной позиции — скорость ниже. */
+export const slow = (): StarThresholds => ({ accuracy: [0.9, 0.94, 0.97], cpm: [60, 100] })
+
+export const pairTitle = (a: string, b: string): L10n => ({
+  ru: `${a} и ${b}`,
+  en: `${a} and ${b}`,
+})
+
+/** Урок с новыми клавишами: страница теории и упражнения. */
+export function keysLesson(
+  id: string,
+  newKeys: string,
+  title: L10n,
+  body: L10n,
+  extra: Partial<LessonDef> = {},
+): LessonDef {
+  return {
+    id,
+    title,
+    newKeys,
+    theory: [newKeysPage(body)],
+    exercises: standardExercises,
+    ...extra,
+  }
+}
+
+/** Урок на готовых текстах. */
+export function textLesson(
+  id: string,
+  title: L10n,
+  texts: string[],
+  extra: Partial<LessonDef> = {},
+): LessonDef {
+  return { id, title, exercises: texts.map((text) => ({ kind: 'text', text })), ...extra }
+}

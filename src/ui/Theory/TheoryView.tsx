@@ -7,6 +7,7 @@ import { useL10n } from '../useL10n'
 import { PostureView } from './PostureView'
 
 const homeCodes = new Set(['KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyJ', 'KeyK', 'KeyL', 'Semicolon'])
+const shiftCodes = new Set(['ShiftLeft', 'ShiftRight'])
 const homeFingers: Finger[] = ['L5', 'L4', 'L3', 'L2', 'R2', 'R3', 'R4', 'R5']
 
 function Illustration({ page, lesson }: { page: TheoryPage; lesson: Lesson }) {
@@ -15,9 +16,16 @@ function Illustration({ page, lesson }: { page: TheoryPage; lesson: Lesson }) {
     const strokes = [...(lesson.newKeys ?? '')]
       .map((ch) => strokeFor(layout, ch))
       .filter((x) => !!x)
+    // Для символов с Shift подсвечиваем и Shift, и мизинец, который его жмёт
+    const shiftFinger = (code: string): Finger => (code === 'ShiftLeft' ? 'L5' : 'R5')
     return {
-      codes: new Set(strokes.map((st) => st.key.code)),
-      fingers: strokes.map((st) => st.key.finger),
+      codes: new Set(
+        strokes.flatMap((st) => [st.key.code, ...(st.shiftCode ? [st.shiftCode] : [])]),
+      ),
+      fingers: strokes.flatMap((st) => [
+        st.key.finger,
+        ...(st.shiftCode ? [shiftFinger(st.shiftCode)] : []),
+      ]),
     }
   }, [lesson, layout])
 
@@ -47,6 +55,13 @@ function Illustration({ page, lesson }: { page: TheoryPage; lesson: Lesson }) {
             highlightCodes={newKeys.codes}
             enabledChars={new Set(lesson.keys)}
           />
+        </>
+      )
+    case 'shift':
+      return (
+        <>
+          <HandsView active={['L5', 'R5']} />
+          <KeyboardView layout={layout} highlightCodes={shiftCodes} />
         </>
       )
     default:

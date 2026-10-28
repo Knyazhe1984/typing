@@ -17,6 +17,16 @@
   --finger-index-r: #c3b3f2;
   --finger-thumb: #d9d9de;
 
+  /* Тепловая карта: одна синяя шкала, светлое — мало, тёмное — много */
+  --heat-none: #ececef;
+  --heat-1: #cde2fb;
+  --heat-2: #9ec5f4;
+  --heat-3: #5598e7;
+  --heat-4: #256abf;
+  --heat-5: #104281;
+  --heat-fg-low: #1d1d22;
+  --heat-fg-high: #ffffff;
+
   --radius: 10px;
   --font-ui: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --font-mono: ui-monospace, 'JetBrains Mono', 'Cascadia Mono', Consolas, monospace;
@@ -39,6 +49,14 @@
     --finger-index-l: #345b82;
     --finger-index-r: #54478a;
     --finger-thumb: #45464e;
+    --heat-none: #2a2b31;
+    --heat-1: #0d366b;
+    --heat-2: #184f95;
+    --heat-3: #256abf;
+    --heat-4: #3987e5;
+    --heat-5: #86b6ef;
+    --heat-fg-low: #ececf1;
+    --heat-fg-high: #0b0b0b;
     color-scheme: dark;
   }
 }
@@ -58,6 +76,14 @@
   --finger-index-l: #345b82;
   --finger-index-r: #54478a;
   --finger-thumb: #45464e;
+  --heat-none: #2a2b31;
+  --heat-1: #0d366b;
+  --heat-2: #184f95;
+  --heat-3: #256abf;
+  --heat-4: #3987e5;
+  --heat-5: #86b6ef;
+  --heat-fg-low: #ececf1;
+  --heat-fg-high: #0b0b0b;
   color-scheme: dark;
 }
 

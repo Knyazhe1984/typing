@@ -8,8 +8,13 @@ function keys(obj: object, prefix = ''): string[] {
   )
 }
 
+// Формы множественного числа у языков разные (в русском есть _few и _many)
+const normalized = (obj: object) => [
+  ...new Set(keys(obj).map((k) => k.replace(/_(zero|one|two|few|many|other)$/, ''))),
+]
+
 describe('i18n', () => {
   it('ru и en содержат одинаковый набор ключей', () => {
-    expect(keys(en).sort()).toEqual(keys(ru).sort())
+    expect(normalized(en).sort()).toEqual(normalized(ru).sort())
   })
 })

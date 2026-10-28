@@ -30,9 +30,24 @@ describe.each(Object.values(courses))('курс $layout', (course) => {
     }
   })
 
-  it('урок повторения даёт настоящие слова', () => {
-    const review = course.lessons.at(-1)!
-    const text = exerciseText({ kind: 'words', count: 20 }, review, course, createRng(1))
-    for (const w of text.split(' ')) expect(course.dictionary).toContain(w)
+  it('повторение букв даёт настоящие слова', () => {
+    const review = course.lessons.find((l) => l.id.endsWith('letters-review'))!
+    const text = exerciseText({ kind: 'words', count: 30 }, review, course, createRng(1))
+    // В английском апостроф и ; изучены на основном ряду и иногда обрамляют слова
+    for (const w of text.split(/[ /]/)) {
+      if (w === '-') continue
+      expect(course.dictionary).toContain(w.replace(/^'|[';,./']+$/g, ''))
+    }
+  })
+
+  it('к концу курса изучены все символы раскладки', () => {
+    const last = course.lessons.at(-1)!
+    const all = layout.rows.flat().flatMap((k) => (k.label ? [] : [k.base, k.shift]))
+    for (const ch of all) expect(last.keys, ch).toContain(ch)
+  })
+
+  it('каждый раздел начинается с заголовка', () => {
+    expect(course.lessons[0].section).toBeDefined()
+    expect(course.lessons.filter((l) => l.section).length).toBeGreaterThanOrEqual(6)
   })
 })

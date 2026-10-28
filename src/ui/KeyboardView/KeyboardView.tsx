@@ -12,6 +12,10 @@ interface Props {
   enabledChars?: Set<string>
   /** Клавиши, выделенные для объяснения (например, новые в уроке) */
   highlightCodes?: Set<string>
+  /** Свой цвет клавиши вместо цвета пальца (тепловая карта) */
+  keyClass?: (k: KeyDef) => string | undefined
+  /** Подсказка при наведении на клавишу */
+  keyTitle?: (k: KeyDef) => string | undefined
 }
 
 function isLetter(ch: string) {
@@ -30,7 +34,15 @@ function KeyCap({ k }: { k: KeyDef }) {
   )
 }
 
-export function KeyboardView({ layout, target, errorCode, enabledChars, highlightCodes }: Props) {
+export function KeyboardView({
+  layout,
+  target,
+  errorCode,
+  enabledChars,
+  highlightCodes,
+  keyClass,
+  keyTitle,
+}: Props) {
   return (
     <div className={s.keyboard} aria-hidden="true">
       {layout.rows.map((row, r) => (
@@ -45,14 +57,24 @@ export function KeyboardView({ layout, target, errorCode, enabledChars, highligh
             if (homingCodes.includes(k.code)) classes.push(s.homing)
             if (isTarget) classes.push(s.target)
             if (k.code === errorCode) classes.push(s.error)
-            if (enabledChars && !k.label && !enabledChars.has(k.base)) classes.push(s.dim)
+            if (
+              enabledChars &&
+              !k.label &&
+              !enabledChars.has(k.base) &&
+              !enabledChars.has(k.shift)
+            ) {
+              classes.push(s.dim)
+            }
+            const custom = keyClass && !k.label ? keyClass(k) : undefined
+            if (custom) classes.push(custom)
             return (
               <div
                 key={k.code}
                 className={classes.join(' ')}
+                title={keyTitle?.(k)}
                 style={{
                   flex: r === 4 ? `0 0 ${(k.width / 15) * 100}%` : `${k.width} 1 0`,
-                  background: k.label ? undefined : fingerColor[k.finger],
+                  background: k.label || keyClass ? undefined : fingerColor[k.finger],
                 }}
               >
                 <KeyCap k={k} />
