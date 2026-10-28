@@ -16,6 +16,7 @@ export function SettingsScreen() {
 
   const toggles = [
     { field: 'sound', key: 'settings.sound' },
+    { field: 'keyClicks', key: 'settings.keyClicks' },
     { field: 'animations', key: 'settings.animations' },
     { field: 'gamification', key: 'settings.gamification' },
   ] as const
@@ -47,6 +48,19 @@ export function SettingsScreen() {
           {themes.map((th) => (
             <option key={th.value} value={th.value}>
               {t(th.key)}
+            </option>
+          ))}
+        </select>
+      </label>
+      <label>
+        {t('settings.dailyGoal')}{' '}
+        <select
+          value={settings.dailyGoalMinutes}
+          onChange={(e) => settings.set({ dailyGoalMinutes: Number(e.target.value) })}
+        >
+          {[5, 10, 15, 20, 30, 45, 60].map((m) => (
+            <option key={m} value={m}>
+              {m}
             </option>
           ))}
         </select>

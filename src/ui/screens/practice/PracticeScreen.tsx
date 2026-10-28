@@ -6,10 +6,13 @@ import { normalizeText } from '../../../core/text/normalize'
 import { practiceTexts } from '../../../content/practiceTexts'
 import { recordPractice } from '../../../storage/progress'
 import { useSettings } from '../../../store/settings'
+import { XpGain } from '../../Game/Celebration'
+import { play } from '../../sound'
 import { StatsBar } from '../../Trainer/StatsBar'
 import { Trainer } from '../../Trainer/Trainer'
 import t_ from '../../Trainer/Trainer.module.css'
 import { ViewToggles } from '../../Trainer/ViewToggles'
+import { useAnnounceRewards } from '../../useAnnounceRewards'
 import s from './PracticeScreen.module.css'
 
 const CUSTOM = 'custom'
@@ -23,7 +26,8 @@ export function PracticeScreen() {
   const [textId, setTextId] = useState(texts[0].id)
   const [customDraft, setCustomDraft] = useState('')
   const [custom, setCustom] = useState<{ text: string; removed: string[] }>()
-  const [result, setResult] = useState<Metrics>()
+  const [result, setResult] = useState<{ m: Metrics; xp?: number }>()
+  const announce = useAnnounceRewards()
   // Растёт при «Ещё раз» — пересоздаёт тренажёр с тем же текстом
   const [attempt, setAttempt] = useState(0)
 
@@ -87,7 +91,10 @@ export function PracticeScreen() {
       {result ? (
         <div className={t_.result}>
           <h2>{t('practice.done')}</h2>
-          <StatsBar m={result} />
+          {settings.gamification && result.xp !== undefined && (
+            <XpGain text={t('game.xpGained', { xp: result.xp })} animate={settings.animations} />
+          )}
+          <StatsBar m={result.m} />
           <div className={t_.actions}>
             <button className="btn btn-primary" onClick={again}>
               {t('practice.again')}
@@ -125,9 +132,12 @@ export function PracticeScreen() {
             key={`${layout.id}:${text}:${settings.stopOnError}:${attempt}`}
             text={text}
             layout={layout}
-            onFinish={(session, m) => {
-              setResult(m)
-              void recordPractice(layout.id, session, m)
+            onFinish={async (session, m) => {
+              setResult({ m })
+              play('success')
+              const rewards = await recordPractice(layout.id, session, m)
+              setResult({ m, xp: rewards.xp })
+              announce(rewards)
             }}
           />
         </>

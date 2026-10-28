@@ -8,45 +8,6 @@
   font-size: 14px;
 }
 
-.list {
-  display: grid;
-  gap: 10px;
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
-
-.item {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 14px 18px;
-  border-radius: var(--radius);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--text);
-  text-decoration: none;
-}
-
-a.item:hover {
-  border-color: var(--accent);
-}
-
-.locked {
-  opacity: 0.5;
-}
-
-.number {
-  font-size: 13px;
-  color: var(--text-muted);
-  min-width: 64px;
-}
-
-.title {
-  flex: 1;
-  font-weight: 600;
-}
-
 .meta {
   font-size: 13px;
   color: var(--text-muted);

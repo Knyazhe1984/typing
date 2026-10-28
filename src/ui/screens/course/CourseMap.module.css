@@ -1,0 +1,92 @@
+.map {
+  position: relative;
+  max-width: 560px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.path {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.node {
+  position: absolute;
+  transform: translate(-50%, -32px);
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  width: 160px;
+  text-align: center;
+  color: var(--text);
+}
+
+a.node:hover {
+  text-decoration: none;
+}
+
+.circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  font-weight: 700;
+  background: var(--surface);
+  border: 3px solid var(--border);
+  color: var(--text-muted);
+  transition: transform 120ms;
+}
+
+a.node:hover .circle {
+  transform: scale(1.08);
+}
+
+.done .circle {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-text);
+}
+
+.current .circle {
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 50%, transparent);
+}
+
+.animated.current .circle {
+  animation: pulse 1.8s infinite;
+}
+
+.locked .circle,
+.locked .caption > * {
+  opacity: 0.5;
+}
+
+.caption {
+  /* Фон под подписью прячет линию тропинки */
+  display: grid;
+  justify-items: center;
+  padding: 2px 8px;
+  border-radius: 8px;
+  background: var(--bg);
+}
+
+.title {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+@keyframes pulse {
+  70% {
+    box-shadow: 0 0 0 14px transparent;
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}

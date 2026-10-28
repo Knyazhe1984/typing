@@ -17,6 +17,9 @@ interface Settings {
   stopOnError: boolean
   showKeyboard: boolean
   showHands: boolean
+  /** Тихий щелчок на каждое нажатие (отдельно от остальных звуков) */
+  keyClicks: boolean
+  dailyGoalMinutes: number
   set: (patch: Partial<Omit<Settings, 'set'>>) => void
 }
 
@@ -33,6 +36,8 @@ export const useSettings = create<Settings>()(
       stopOnError: true,
       showKeyboard: true,
       showHands: true,
+      keyClicks: false,
+      dailyGoalMinutes: 10,
       set: (patch) => set(patch),
     }),
     { name: 'settings', storage: createJSONStorage(() => localStorage) },

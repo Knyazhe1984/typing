@@ -6,6 +6,7 @@ import { Layout } from './ui/Layout/Layout'
 import { HomeScreen } from './ui/screens/HomeScreen'
 import { PlaceholderScreen } from './ui/screens/PlaceholderScreen'
 import { SettingsScreen } from './ui/screens/SettingsScreen'
+import { AchievementsScreen } from './ui/screens/AchievementsScreen'
 import { CourseScreen } from './ui/screens/course/CourseScreen'
 import { LessonRoute } from './ui/screens/course/LessonScreen'
 import { PracticeScreen } from './ui/screens/practice/PracticeScreen'
@@ -34,6 +35,7 @@ export default function App() {
           <Route path="course" element={<CourseScreen />} />
           <Route path="course/:lessonId" element={<LessonRoute />} />
           <Route path="practice" element={<PracticeScreen />} />
+          <Route path="achievements" element={<AchievementsScreen />} />
           <Route path="stats" element={<PlaceholderScreen titleKey="nav.stats" />} />
           <Route path="settings" element={<SettingsScreen />} />
         </Route>

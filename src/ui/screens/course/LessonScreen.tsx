@@ -9,9 +9,11 @@ import { createRng } from '../../../core/generator/random'
 import { layouts } from '../../../core/layouts'
 import { defaultThresholds, starsFor } from '../../../core/progress/stars'
 import type { LessonProgress } from '../../../storage/db'
-import { completeTheoryLesson, recordLesson } from '../../../storage/progress'
+import { completeTheoryLesson, recordLesson, type Rewards } from '../../../storage/progress'
 import { useSettings } from '../../../store/settings'
-import { Stars } from '../../Stars'
+import { AnimatedStars, Confetti, XpGain } from '../../Game/Celebration'
+import { play } from '../../sound'
+import { useAnnounceRewards } from '../../useAnnounceRewards'
 import { TheoryView } from '../../Theory/TheoryView'
 import { StatsBar } from '../../Trainer/StatsBar'
 import { Trainer } from '../../Trainer/Trainer'
@@ -23,7 +25,7 @@ import s from './CourseScreen.module.css'
 type Phase =
   | { type: 'theory'; page: number }
   | { type: 'exercises'; index: number; texts: string[]; sessions: Session[] }
-  | { type: 'result'; m: Metrics; stars: number; prev?: LessonProgress }
+  | { type: 'result'; m: Metrics; stars: number; prev?: LessonProgress; rewards: Rewards }
 
 /** Ключ по id урока: при переходе к следующему уроку состояние начинается заново. */
 export function LessonRoute() {
@@ -49,6 +51,7 @@ function LessonScreen({ course, lesson }: { course: Course; lesson: Lesson }) {
   const hasExercises = !!lesson.exercises?.length
   const nextLesson = course.lessons[lesson.index + 1]
   const thresholds = lesson.thresholds ?? defaultThresholds
+  const announce = useAnnounceRewards()
 
   const [phase, setPhase] = useState<Phase>(() =>
     theory.length
@@ -61,7 +64,7 @@ function LessonScreen({ course, lesson }: { course: Course; lesson: Lesson }) {
   }
 
   async function finishTheory() {
-    await completeTheoryLesson(lesson.id)
+    announce({ achievements: await completeTheoryLesson(lesson.id) })
     navigate(nextLesson ? `/course/${nextLesson.id}` : '/course')
   }
 
@@ -74,8 +77,10 @@ function LessonScreen({ course, lesson }: { course: Course; lesson: Lesson }) {
     }
     const m = combinedMetrics(sessions)
     const stars = starsFor(m, thresholds)
-    const prev = await recordLesson(lesson.id, lesson.layout, sessions, m, stars)
-    setPhase({ type: 'result', m, stars, prev })
+    const { prev, rewards } = await recordLesson(lesson.id, lesson.layout, sessions, m, stars)
+    play(stars > 0 ? 'success' : 'fail')
+    setPhase({ type: 'result', m, stars, prev, rewards })
+    announce(rewards)
   }
 
   return (
@@ -165,18 +170,25 @@ interface ResultProps {
 
 function Result({ phase, minAccuracy, nextStar, nextLessonId, onRetry }: ResultProps) {
   const { t } = useTranslation()
-  const { m, stars, prev } = phase
+  const { gamification, animations } = useSettings()
+  const { m, stars, prev, rewards } = phase
   const passed = stars > 0
   const newBest = passed && !!prev && (stars > prev.bestStars || m.cpm > prev.bestCpm)
   const pct = (x: number) => Math.round(x * 100)
   return (
     <div className={t_.result} style={{ borderColor: passed ? 'var(--ok)' : 'var(--error)' }}>
+      {gamification && animations && stars === 3 && <Confetti />}
       <h2>{passed ? t('lesson.resultTitle') : t('lesson.failedTitle')}</h2>
-      <Stars count={stars} size={40} />
+      {gamification && (
+        <>
+          <AnimatedStars count={stars} animate={animations} />
+          <XpGain text={t('game.xpGained', { xp: rewards.xp })} animate={animations} />
+        </>
+      )}
       {newBest && <strong style={{ color: 'var(--ok)' }}>{t('lesson.newBest')}</strong>}
       <StatsBar m={m} />
       {!passed && <p className={t_.hint}>{t('lesson.failedHint', { min: pct(minAccuracy) })}</p>}
-      {passed && nextStar && (
+      {passed && gamification && nextStar && (
         <p className={t_.hint}>
           {t('lesson.nextStar', { acc: pct(nextStar.acc), cpm: nextStar.cpm })}
         </p>

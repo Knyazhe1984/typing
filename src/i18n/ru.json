@@ -8,12 +8,15 @@
     "course": "Курс",
     "practice": "Тренировка",
     "stats": "Статистика",
-    "settings": "Настройки"
+    "settings": "Настройки",
+    "achievements": "Достижения"
   },
   "home": {
     "start": "Начать курс",
     "practice": "Свободная тренировка",
-    "noMobile": "Для занятий нужна физическая клавиатура."
+    "noMobile": "Для занятий нужна физическая клавиатура.",
+    "continue": "Продолжить: {{lesson}}",
+    "allDone": "Весь курс пройден! Тренируйтесь в свободном режиме."
   },
   "settings": {
     "uiLanguage": "Язык интерфейса",
@@ -23,7 +26,9 @@
     "themeDark": "Тёмная",
     "sound": "Звуки",
     "animations": "Анимации",
-    "gamification": "Игровые элементы (звёзды, достижения, серии)"
+    "gamification": "Игровые элементы (звёзды, достижения, серии)",
+    "keyClicks": "Щелчок на каждое нажатие",
+    "dailyGoal": "Цель на день, минут"
   },
   "common": {
     "comingSoon": "Скоро здесь появится этот раздел."
@@ -72,5 +77,30 @@
     "nextLesson": "Следующий урок",
     "toCourse": "К курсу",
     "notFound": "Урок не найден."
+  },
+  "game": {
+    "levelUp": "Новый уровень: {{level}}!",
+    "level": "Уровень {{level}}",
+    "levelShort": "Ур. {{level}}",
+    "xp": "{{current}} / {{needed}} XP",
+    "xpGained": "+{{xp}} XP",
+    "streak_one": "{{count}} день подряд",
+    "streak_few": "{{count}} дня подряд",
+    "streak_many": "{{count}} дней подряд",
+    "streak_other": "{{count}} дня подряд",
+    "streakTitle": "Серия",
+    "streakBest": "Лучшая серия: {{n}}",
+    "streakNone": "Позанимайтесь сегодня, чтобы начать серию",
+    "streakKeep": "Позанимайтесь сегодня, чтобы не прервать серию",
+    "dailyGoal": "Цель на день",
+    "dailyGoalProgress": "{{done}} из {{goal}} мин",
+    "dailyGoalDone": "Цель выполнена!",
+    "achievementsCount": "{{n}} из {{total}}",
+    "lockedAchievement": "Ещё не открыто",
+    "unlockedAt": "Открыто {{date}}",
+    "manyAchievements_one": "{{count}} новое достижение",
+    "manyAchievements_few": "{{count}} новых достижения",
+    "manyAchievements_many": "{{count}} новых достижений",
+    "manyAchievements_other": "{{count}} новых достижения"
   }
 }

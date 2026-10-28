@@ -8,12 +8,15 @@
     "course": "Course",
     "practice": "Practice",
     "stats": "Stats",
-    "settings": "Settings"
+    "settings": "Settings",
+    "achievements": "Achievements"
   },
   "home": {
     "start": "Start the course",
     "practice": "Free practice",
-    "noMobile": "You need a physical keyboard to practice."
+    "noMobile": "You need a physical keyboard to practice.",
+    "continue": "Continue: {{lesson}}",
+    "allDone": "You finished the whole course! Keep practicing in free mode."
   },
   "settings": {
     "uiLanguage": "Interface language",
@@ -23,7 +26,9 @@
     "themeDark": "Dark",
     "sound": "Sounds",
     "animations": "Animations",
-    "gamification": "Game elements (stars, achievements, streaks)"
+    "gamification": "Game elements (stars, achievements, streaks)",
+    "keyClicks": "Click on every keystroke",
+    "dailyGoal": "Daily goal, minutes"
   },
   "common": {
     "comingSoon": "This section is coming soon."
@@ -72,5 +77,30 @@
     "nextLesson": "Next lesson",
     "toCourse": "Back to course",
     "notFound": "Lesson not found."
+  },
+  "game": {
+    "levelUp": "Level {{level}} reached!",
+    "level": "Level {{level}}",
+    "levelShort": "Lv {{level}}",
+    "xp": "{{current}} / {{needed}} XP",
+    "xpGained": "+{{xp}} XP",
+    "streak_one": "{{count}}-day streak",
+    "streak_few": "{{count}}-day streak",
+    "streak_many": "{{count}}-day streak",
+    "streak_other": "{{count}}-day streak",
+    "streakTitle": "Streak",
+    "streakBest": "Best streak: {{n}}",
+    "streakNone": "Practice today to start a streak",
+    "streakKeep": "Practice today to keep your streak",
+    "dailyGoal": "Daily goal",
+    "dailyGoalProgress": "{{done}} of {{goal}} min",
+    "dailyGoalDone": "Goal reached!",
+    "achievementsCount": "{{n}} of {{total}}",
+    "lockedAchievement": "Not unlocked yet",
+    "unlockedAt": "Unlocked {{date}}",
+    "manyAchievements_one": "{{count}} new achievement",
+    "manyAchievements_few": "{{count}} new achievements",
+    "manyAchievements_many": "{{count}} new achievements",
+    "manyAchievements_other": "{{count}} new achievements"
   }
 }

@@ -17,6 +17,7 @@ test('курс: азы → первый урок → звёзды сохраня
   await page.getByRole('button', { name: 'Далее' }).click()
   await page.getByRole('button', { name: 'Далее' }).click()
   await page.getByRole('button', { name: 'Готово' }).click()
+  await expect(page.getByRole('status').getByText('Первые шаги', { exact: true })).toBeVisible()
 
   // Сразу открывается следующий урок
   await expect(page.getByRole('heading', { name: 'А и О' })).toBeVisible()
@@ -31,11 +32,31 @@ test('курс: азы → первый урок → звёзды сохраня
   }
   await expect(page.getByRole('heading', { name: 'Урок пройден!' })).toBeVisible()
   await expect(page.getByLabel('3/3')).toBeVisible()
-  await page.screenshot({ path: 'test-results/lesson-result.png', fullPage: true })
+  await expect(page.getByText(/^\+\d+ XP$/)).toBeVisible()
+  // Достижений за урок много — они сведены в одно уведомление
+  await expect(page.getByRole('status').getByText(/новых достижени/)).toContainText('6')
+  await expect(page.getByRole('status')).toContainText('Три звезды')
+  await page.waitForTimeout(800)
+  await page.screenshot({ path: 'test-results/lesson-result.png' })
 
   await page.reload()
   await page.getByRole('link', { name: 'К курсу' }).first().click()
   await expect(page.getByRole('link', { name: /А и О/ }).getByLabel('3/3')).toBeVisible()
   await expect(page.getByRole('link', { name: /В и Л/ })).toBeVisible()
-  await page.screenshot({ path: 'test-results/course-list.png', fullPage: true })
+  await page.screenshot({ path: 'test-results/course-map.png', fullPage: true })
+
+  // Серия в шапке и открытые достижения
+  await expect(page.getByRole('banner').getByText('1', { exact: true })).toBeVisible()
+  await page.getByRole('link', { name: 'Достижения' }).click()
+  // 4 за уроки + 3 за скорость: тест печатает мгновенно
+  await expect(page.getByText('7 из 17')).toBeVisible()
+  await page.screenshot({ path: 'test-results/achievements.png', fullPage: true })
+
+  await page
+    .getByRole('link', { name: 'Главная' })
+    .or(page.getByRole('link', { name: /Клавиатурный/ }))
+    .first()
+    .click()
+  await expect(page.getByRole('link', { name: 'Продолжить: В и Л' })).toBeVisible()
+  await page.screenshot({ path: 'test-results/home.png', fullPage: true })
 })

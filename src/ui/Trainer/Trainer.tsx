@@ -4,6 +4,7 @@ import { isFinished, metrics, type Metrics, type Session } from '../../core/engi
 import type { Finger, Layout, LayoutId } from '../../core/layouts'
 import { useSettings } from '../../store/settings'
 import { HandsView } from '../HandsView/HandsView'
+import { play } from '../sound'
 import { KeyboardView } from '../KeyboardView/KeyboardView'
 import { TypingArea } from '../TypingArea/TypingArea'
 import { useTicker, useTypingSession } from '../hooks/useTypingSession'
@@ -34,6 +35,15 @@ export function Trainer({ text, layout, enabledChars, onFinish }: Props) {
   )
   const finished = isFinished(session)
   const now = useTicker(session.startedAt !== null && !finished)
+
+  useEffect(() => {
+    if (errorTick > 0) play('error')
+  }, [errorTick])
+
+  const keystrokeCount = session.keystrokes.length
+  useEffect(() => {
+    if (keystrokeCount > 0) play('key')
+  }, [keystrokeCount])
 
   const finish = useEffectEvent((done: Session) => onFinish(done, metrics(done, 0)))
   // После завершения сессия больше не меняется, так что срабатывает ровно один раз
